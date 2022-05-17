@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/characterFragment"
+        android:icon="@color/teal_700"
+        android:title="@string/character" />
+    <item
+        android:id="@+id/locationFragment"
+        android:icon="@color/teal_200"
+        android:title="@string/location" />
+    <item
+        android:id="@+id/episodeFragment"
+        android:icon="@color/teal_200"
+        android:title="@string/episode" />
+</menu>
