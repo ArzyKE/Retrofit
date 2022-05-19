@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.retrofit.App;
+import com.example.retrofit.data.repositories.EpisodeRepository;
 import com.example.retrofit.model.EpisodeModel;
 import com.example.retrofit.model.RiskyAndMortyResponse;
 
@@ -12,19 +13,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EpisodeViewModel extends ViewModel {
-    public MutableLiveData<RiskyAndMortyResponse<EpisodeModel>>data = new MutableLiveData<>();
 
-    public void getEpisodeList(){
-        App.episodeApiServices.fetchEpisode().enqueue(new Callback<RiskyAndMortyResponse<EpisodeModel>>() {
-            @Override
-            public void onResponse(Call<RiskyAndMortyResponse<EpisodeModel>> call, Response<RiskyAndMortyResponse<EpisodeModel>> response) {
-                data.setValue(response.body());
-            }
+    private EpisodeRepository episodeRepository = new EpisodeRepository();
+    public int page = 1;
 
-            @Override
-            public void onFailure(Call<RiskyAndMortyResponse<EpisodeModel>> call, Throwable t) {
-           data.setValue(null);
-            }
-        });
+
+    public MutableLiveData<RiskyAndMortyResponse<EpisodeModel>> fetchEpisode(){
+        return episodeRepository.fetchEpisode(page);
     }
 }

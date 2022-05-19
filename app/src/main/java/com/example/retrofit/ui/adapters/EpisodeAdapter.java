@@ -20,10 +20,6 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Vie
         super(diffCallback);
     }
 
-    protected EpisodeAdapter(@NonNull AsyncDifferConfig<EpisodeModel> config) {
-        super(config);
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

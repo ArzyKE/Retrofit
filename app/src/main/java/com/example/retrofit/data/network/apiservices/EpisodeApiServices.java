@@ -5,8 +5,12 @@ import com.example.retrofit.model.RiskyAndMortyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface EpisodeApiServices {
     @GET("api/episode")
-    Call<RiskyAndMortyResponse<EpisodeModel>>fetchEpisode();
+    Call<RiskyAndMortyResponse<EpisodeModel>> fetchEpisode(
+            @Query("page")
+                    int page
+    );
 }
