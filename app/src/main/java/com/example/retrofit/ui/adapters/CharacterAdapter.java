@@ -2,6 +2,7 @@ package com.example.retrofit.ui.adapters;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import com.example.retrofit.databinding.ItemCharacterBinding;
 import com.example.retrofit.model.CharacterModel;
 
 public class CharacterAdapter extends ListAdapter<CharacterModel, CharacterAdapter.ViewHolder> {
+
+    private OnCharacterItemClick onCharacterItemClick;
 
     public CharacterAdapter(@NonNull DiffUtil.ItemCallback<CharacterModel> diffCallback) {
         super(diffCallback);
@@ -34,7 +37,12 @@ public class CharacterAdapter extends ListAdapter<CharacterModel, CharacterAdapt
         holder.onBind(getItem(position));
     }
 
+    public void setOnCharacterItemClick(OnCharacterItemClick onCharacterItemClick) {
+        this.onCharacterItemClick = onCharacterItemClick;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         private ItemCharacterBinding binding;
 
         public ViewHolder(@NonNull ItemCharacterBinding binding) {
@@ -46,6 +54,13 @@ public class CharacterAdapter extends ListAdapter<CharacterModel, CharacterAdapt
         public void onBind(CharacterModel model) {
             Glide.with(binding.itemCharacterImage).load(model.getImage()).into(binding.itemCharacterImage);
             binding.itemCharacterName.setText(model.getName());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onCharacterItemClick.onItemClick(model);
+
+                }
+            });
         }
     }
 

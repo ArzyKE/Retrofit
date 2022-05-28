@@ -2,19 +2,20 @@ package com.example.retrofit.ui.adapters;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.retrofit.databinding.ItemEpisodeBinding;
 import com.example.retrofit.model.EpisodeModel;
-import com.example.retrofit.model.LocationModel;
 
 public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.ViewHolder> {
+
+    private OnEpisodeItemClick onEpisodeItemClick;
 
     public EpisodeAdapter(@NonNull DiffUtil.ItemCallback<EpisodeModel> diffCallback) {
         super(diffCallback);
@@ -31,6 +32,10 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Vie
         holder.onBind(getItem(position));
     }
 
+    public void setOnEpisodeItemClick(OnEpisodeItemClick onEpisodeItemClick) {
+        this.onEpisodeItemClick = onEpisodeItemClick;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemEpisodeBinding binding;
 
@@ -40,9 +45,15 @@ public class EpisodeAdapter extends ListAdapter<EpisodeModel, EpisodeAdapter.Vie
         }
 
         public void onBind(EpisodeModel model) {
-            binding.itemEpisode.setText(model.getEpisode());
             binding.itemEpisodeName.setText(model.getName());
             binding.itemEpisodeAirDate.setText(model.getAir_date());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+               onEpisodeItemClick.onItemClick(model);
+                }
+            });
+            //  binding.itemEpisode.setText(model.getEpisode());
         }
     }
 

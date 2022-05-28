@@ -9,7 +9,8 @@
         android:id="@+id/characterFragment"
         android:name="com.example.retrofit.ui.fragments.character.CharacterFragment"
         android:label="fragment_character"
-        tools:layout="@layout/fragment_character" />
+        tools:layout="@layout/fragment_character" >
+    </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.example.retrofit.ui.fragments.location.LocationFragment"

@@ -17,7 +17,9 @@ public class LocationRepository {
         App.locationApiServices.fetchLocations(page).enqueue(new Callback<RiskyAndMortyResponse<LocationModel>>() {
             @Override
             public void onResponse(Call<RiskyAndMortyResponse<LocationModel>> call, Response<RiskyAndMortyResponse<LocationModel>> response) {
-                data.setValue(response.body());
+                if (response.body() != null) {
+                    data.setValue(response.body());
+                }
             }
 
             @Override
@@ -27,4 +29,5 @@ public class LocationRepository {
         });
         return data;
     }
+
 }

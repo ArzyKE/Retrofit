@@ -33,17 +33,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController);
 
-//        switch (item.getItemId()) {
-//            case R.id.navigation_home:
-//                chara(firstFragment);
-//                return true;
-//            case R.id.navigation_dashboard:
-//                changeFragment(secondFragment);
-//                return true;
-//        }
-//        return false;
-//    }
-
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.characterFragment,
                 R.id.locationFragment,

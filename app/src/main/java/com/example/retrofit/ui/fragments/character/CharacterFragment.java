@@ -1,5 +1,8 @@
 package com.example.retrofit.ui.fragments.character;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,8 @@ import com.example.retrofit.databinding.FragmentCharacterBinding;
 import com.example.retrofit.model.CharacterModel;
 import com.example.retrofit.model.RiskyAndMortyResponse;
 import com.example.retrofit.ui.adapters.CharacterAdapter;
+
+import java.util.ArrayList;
 
 public class CharacterFragment extends BaseFragment<FragmentCharacterBinding> {
 
@@ -37,7 +42,7 @@ public class CharacterFragment extends BaseFragment<FragmentCharacterBinding> {
     @Override
     protected void setupViews() {
         linearLayoutManager = new LinearLayoutManager(requireContext());
-        binding.characterRecView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.characterRecView.setLayoutManager(linearLayoutManager);
         binding.characterRecView.setAdapter(characterAdapter);
 
         binding.characterRecView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -48,25 +53,16 @@ public class CharacterFragment extends BaseFragment<FragmentCharacterBinding> {
                     visibleCount = linearLayoutManager.getChildCount();
                     totalCount = linearLayoutManager.getItemCount();
                     pastVisible = linearLayoutManager.findFirstVisibleItemPosition();
-                    if (loading) {
-                        if ((visibleCount + pastVisible) >= totalCount)
+                    if ((visibleCount + pastVisible) >= totalCount) {
+                        if (viewModel.page != totalCount && (viewModel.page < totalCount)) {
+                            viewModel.page++;
+                            if (!loading && (viewModel.page < totalCount))
+                                loading = true;
+                            fetchCharacters();
                             loading = false;
-
-
-                        viewModel.page++;
-                        viewModel.fetchCharacters().observe(getViewLifecycleOwner(), new Observer<RiskyAndMortyResponse<CharacterModel>>() {
-                            @Override
-                            public void onChanged(RiskyAndMortyResponse<CharacterModel> characterModelRiskyAndMortyResponse) {
-                                characterAdapter.submitList(characterModelRiskyAndMortyResponse.getResult());
-
-
-                            }
-                        });
-
+                        }
                     }
                 }
-
-
             }
         });
     }
@@ -80,4 +76,40 @@ public class CharacterFragment extends BaseFragment<FragmentCharacterBinding> {
             }
         });
     }
+
+    private void fetchCharacters() {
+        if (isNetwork()) {
+            viewModel.fetchCharacters().observe(getViewLifecycleOwner(), new Observer<RiskyAndMortyResponse<CharacterModel>>() {
+                @Override
+                public void onChanged(RiskyAndMortyResponse<CharacterModel> characterModelRiskyAndMortyResponse) {
+                    if (!loading) {
+                        ArrayList<CharacterModel> list = new ArrayList(characterAdapter.getCurrentList());
+                        list.addAll(characterModelRiskyAndMortyResponse.getResult());
+                        characterAdapter.submitList(list);
+                        if (list != characterAdapter.getCurrentList()) {
+                            characterAdapter.submitList(list);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private boolean isNetwork() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+//    @Override
+//    protected void setupListener() {
+//        characterAdapter.setOnItemClick(new OnItemClick() {
+//            @Override
+//            public void onItemClick(int position) {
+//                Navigation.findNavController(requireView()).navigate(
+//                        (NavDirections) CharacterFragmentDirections
+//                );
+//            }
+//        });
 }

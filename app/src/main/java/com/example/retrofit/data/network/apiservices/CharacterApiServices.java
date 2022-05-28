@@ -5,6 +5,7 @@ import com.example.retrofit.model.RiskyAndMortyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface CharacterApiServices {
@@ -15,5 +16,8 @@ public interface CharacterApiServices {
                     int page
     );
 
+    @GET("api/character/{id}")
+    Call<CharacterModel> fetchCharacter(
+            @Path("id") int id);
 }
 

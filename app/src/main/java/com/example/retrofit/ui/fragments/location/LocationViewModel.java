@@ -13,7 +13,7 @@ public class LocationViewModel extends ViewModel {
 
     public int page = 1;
 
-    public MutableLiveData<RiskyAndMortyResponse<LocationModel>> fetchLocation() {
+    public MutableLiveData<RiskyAndMortyResponse<LocationModel>> getList() {
         return locationRepository.fetchLocation(page);
     }
 }
